@@ -1,0 +1,9 @@
+# Test and lint dependencies on top of the serving runtime.
+# Install with: pip install --extra-index-url https://download.pytorch.org/whl/cpu -r requirements-dev.txt
+-r requirements-serve.txt
+mlflow==3.18.0
+matplotlib==3.11.2
+scikit-learn==1.9.1
+pytest==9.2.0
+httpx==0.28.1
+ruff==0.17.6

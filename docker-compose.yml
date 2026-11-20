@@ -1,0 +1,15 @@
+services:
+  inference:
+    build: .
+    image: visionforge-inference:latest
+    ports:
+      - "${VISIONFORGE_HOST_PORT:-8000}:8000"
+    environment:
+      VISIONFORGE_CHECKPOINT_PATH: ${VISIONFORGE_CHECKPOINT_PATH:-artifacts/checkpoints/best.pth}
+      VISIONFORGE_DEVICE: ${VISIONFORGE_DEVICE:-cpu}
+      VISIONFORGE_TOP_K: ${VISIONFORGE_TOP_K:-3}
+      VISIONFORGE_MAX_UPLOAD_BYTES: ${VISIONFORGE_MAX_UPLOAD_BYTES:-5242880}
+    volumes:
+      # Trained weights live on the host and are mounted read-only.
+      - ./artifacts:/app/artifacts:ro
+    restart: unless-stopped
