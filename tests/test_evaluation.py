@@ -4,7 +4,10 @@ import torch.nn.functional as F
 from torch import nn
 from torch.utils.data import DataLoader, TensorDataset
 
-from src.visionforge.evaluation.evaluator import collect_predictions, evaluate_predictions
+from src.visionforge.evaluation.evaluator import (
+    collect_predictions,
+    evaluate_predictions,
+)
 
 
 class EchoLogits(nn.Module):
