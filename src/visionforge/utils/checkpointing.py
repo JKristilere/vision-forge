@@ -23,7 +23,9 @@ def save_checkpoint(directory, model, optimizer, epoch, val_loss, best_val_loss,
     if is_best:
         torch.save(state, directory / "best.pth")
 
-def load_checkpoint(path, model, optimizer=None, device=torch.device("cuda" if torch.cuda.is_available() else "cpu")):
+def load_checkpoint(path, model, optimizer=None, device=None):
+    if device is None:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     checkpoint = torch.load(path, map_location=device)
     model.load_state_dict(checkpoint["model_state_dict"])
     if optimizer is not None:

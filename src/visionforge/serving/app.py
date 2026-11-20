@@ -2,6 +2,7 @@ import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+import anyio
 import yaml
 from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.concurrency import run_in_threadpool
@@ -44,8 +45,8 @@ def _apply_env_overrides(serving: dict) -> None:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # The model is loaded once at startup and reused by every request.
-    with open(CONFIG_PATH) as f:
-        config = yaml.safe_load(f)
+    async with anyio.open_file(CONFIG_PATH, "r") as f:
+        config = yaml.safe_load(await f.read())
     _apply_env_overrides(config["serving"])
     app.state.max_upload_bytes = config["serving"]["max_upload_bytes"]
     app.state.predictor = None
@@ -80,7 +81,9 @@ def model_info(request: Request) -> ModelInfoResponse:
 
 
 @app.post("/predict", response_model=PredictResponse)
-async def predict(request: Request, file: UploadFile = File(...)) -> PredictResponse:
+async def predict(request: Request, file: UploadFile | None = None) -> PredictResponse:
+    if file is None:
+        file = File(...)
     predictor = _get_predictor(request)
 
     if not (file.content_type or "").startswith(ALLOWED_CONTENT_PREFIX):
