@@ -1,6 +1,9 @@
 import torch
 import yaml
 from PIL import Image
+from torch.utils.data import RandomSampler, SequentialSampler
+from torchvision import transforms
+
 from src.visionforge.data import datasets as datasets_module
 from src.visionforge.data.datasets import CIFAR10DataModule
 from src.visionforge.data.transforms import build_transforms
@@ -64,6 +67,23 @@ def test_loaders_yield_batches_of_configured_sizes(tmp_path, project_config, mon
 
     val_images, _ = next(iter(module.val_dataloader()))
     assert val_images.shape == (project_config["eval_batch_size"], 3, 32, 32)
+
+    test_images, _ = next(iter(module.test_dataloader()))
+    assert test_images.shape == (project_config["eval_batch_size"], 3, 32, 32)
+    assert isinstance(module.train_dataloader().sampler, RandomSampler)
+    assert isinstance(module.val_dataloader().sampler, SequentialSampler)
+    assert isinstance(module.test_dataloader().sampler, SequentialSampler)
+
+
+def test_validation_and_test_use_evaluation_transform(tmp_path, project_config, monkeypatch):
+    module = _setup_module(_config_path(tmp_path, project_config), monkeypatch)
+
+    assert module.train_dataset.dataset.transform is not module.validation_dataset.dataset.transform
+    assert module.validation_dataset.dataset.transform is module.test_dataset.transform
+    assert isinstance(module.train_dataset.dataset.transform.transforms[0], transforms.RandomHorizontalFlip)
+    assert isinstance(module.train_dataset.dataset.transform.transforms[1], transforms.RandomCrop)
+    assert isinstance(module.validation_dataset.dataset.transform.transforms[0], transforms.ToTensor)
+    assert module.test_dataset.transform(Image.new("RGB", (32, 32))).shape == (3, 32, 32)
 
 
 def test_eval_transform_normalizes_with_configured_mean_and_std():

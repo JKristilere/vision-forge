@@ -17,6 +17,6 @@ mlruns/
 mlflow.db
 TODO
 
-data/
+/data/
 artifacts/checkpoints/last.pth
 .ruff_cache/
