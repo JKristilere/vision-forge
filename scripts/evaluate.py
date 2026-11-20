@@ -3,22 +3,19 @@ Evaluation script for model predictions.
 """
 
 import json
-import torch
-import mlflow
-from torch import nn
-
-from src.visionforge.evaluation.error_analysis import plot_error_grid
-from src.visionforge.evaluation.evaluator import *
-from src.visionforge.data.datasets import CIFAR10DataModule
-from src.visionforge.models.cnn import CNN
-from src.visionforge.utils.checkpointing import load_checkpoint
-from src.visionforge.utils.tracking import setup_mlflow, log_final_artifacts
 from pathlib import Path
+
+import mlflow
+import torch
 import yaml
 
-from src.visionforge.training.optimizer import create_optimizer
+from src.visionforge.data.datasets import CIFAR10DataModule
+from src.visionforge.evaluation.error_analysis import plot_error_grid
+from src.visionforge.evaluation.evaluator import *
+from src.visionforge.models.cnn import CNN
+from src.visionforge.utils.checkpointing import load_checkpoint
 from src.visionforge.utils.logging import setup_logger
-
+from src.visionforge.utils.tracking import setup_mlflow
 
 if __name__ == "__main__":
     logger = setup_logger(__name__)

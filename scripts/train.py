@@ -1,23 +1,21 @@
 """Training script for VisionForge CNN models for running experiments.
 """
 
-import torch
-import torch.nn as nn
-import mlflow
 import argparse
-
-from src.visionforge.models.cnn import CNN
-from src.visionforge.data.datasets import CIFAR10DataModule
-from src.visionforge.training.trainer import Trainer
-from src.visionforge.utils.logging import setup_logger
-from src.visionforge.training.optimizer import create_optimizer, create_scheduler
-from src.visionforge.utils.checkpointing import load_checkpoint
-from src.visionforge.utils.tracking import setup_mlflow, log_final_artifacts
 from pathlib import Path
+
+import mlflow
+import torch
 import yaml
+from torch import nn
 
-
-
+from src.visionforge.data.datasets import CIFAR10DataModule
+from src.visionforge.models.cnn import CNN
+from src.visionforge.training.optimizer import create_optimizer, create_scheduler
+from src.visionforge.training.trainer import Trainer
+from src.visionforge.utils.checkpointing import load_checkpoint
+from src.visionforge.utils.logging import setup_logger
+from src.visionforge.utils.tracking import log_final_artifacts, setup_mlflow
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
