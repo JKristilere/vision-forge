@@ -8,7 +8,7 @@ import mlflow
 import torch
 
 
-def setup_mlflow(tracking_uri: str, experiment_name: str, run_id: str = None) -> str:
+def setup_mlflow(tracking_uri: str, experiment_name: str, run_id: str | None = None) -> str:
     """
     Set up MLflow tracking with the specified tracking URI, experiment name, and optional run ID.
 
