@@ -45,7 +45,7 @@ def _apply_env_overrides(serving: dict) -> None:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # The model is loaded once at startup and reused by every request.
-    async with anyio.open_file(CONFIG_PATH, "r") as f:
+    async with await anyio.open_file(CONFIG_PATH, "r") as f:
         config = yaml.safe_load(await f.read())
     _apply_env_overrides(config["serving"])
     app.state.max_upload_bytes = config["serving"]["max_upload_bytes"]
