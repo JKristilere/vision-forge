@@ -2,9 +2,11 @@
 Utility functions for MLflow tracking.
 """
 
+from pathlib import Path
+
 import mlflow
 import torch
-from pathlib import Path
+
 
 def setup_mlflow(tracking_uri: str, experiment_name: str, run_id: str = None) -> str:
     """

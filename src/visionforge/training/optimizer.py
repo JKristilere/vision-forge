@@ -2,7 +2,8 @@
 Optimizer utilities for VisionForge training module.
 """
 
-import torch.optim as optim
+from torch import optim
+
 
 def create_optimizer(optimizer_name, params=None, lr=0.01, weight_decay=0.0):
     if optimizer_name.lower() == "sgd":

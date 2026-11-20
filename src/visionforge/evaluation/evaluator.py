@@ -1,16 +1,23 @@
 """
 Evaluator for model performance on evaluation datasets.
 """
-import torch
 import matplotlib
+import torch
+
 matplotlib.use("Agg")  # Figures are only saved to disk; avoid GUI backends (Tk) that may be unavailable.
-import matplotlib.pyplot as plt
-import yaml
 from pathlib import Path
-import os
-from sklearn.metrics import (accuracy_score, precision_score, recall_score, 
-                             f1_score, confusion_matrix, ConfusionMatrixDisplay,
-                               classification_report)
+
+import matplotlib.pyplot as plt
+from sklearn.metrics import (
+    ConfusionMatrixDisplay,
+    accuracy_score,
+    classification_report,
+    confusion_matrix,
+    f1_score,
+    precision_score,
+    recall_score,
+)
+
 
 def collect_predictions(model, dataloader, device) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     """

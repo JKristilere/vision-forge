@@ -8,7 +8,11 @@ from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import JSONResponse
 
 from src.visionforge.serving.predictor import InvalidImageError, Predictor
-from src.visionforge.serving.schemas import HealthResponse, ModelInfoResponse, PredictResponse
+from src.visionforge.serving.schemas import (
+    HealthResponse,
+    ModelInfoResponse,
+    PredictResponse,
+)
 from src.visionforge.utils.logging import setup_logger
 
 logger = setup_logger(__name__)

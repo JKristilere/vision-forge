@@ -1,6 +1,7 @@
 """Logging utilities for VisionForge."""
 import logging
 
+
 def setup_logger(name, level=logging.INFO):
     logger = logging.getLogger(name)
     logger.setLevel(level)

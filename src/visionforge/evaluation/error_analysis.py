@@ -5,6 +5,7 @@ Error analysis utilities for model predictions.
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")  # Figures are only saved to disk; avoid GUI backends (Tk) that may be unavailable.
 import matplotlib.pyplot as plt
 import torch

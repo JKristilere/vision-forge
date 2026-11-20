@@ -1,11 +1,12 @@
 """Trainer module for training CNN models."""
 import time
-import torch
-import mlflow
-from src.visionforge.utils.logging import setup_logger
-from src.visionforge.utils.checkpointing import save_checkpoint
-from src.visionforge.training.earlystopping import EarlyStopping
 
+import mlflow
+import torch
+
+from src.visionforge.training.earlystopping import EarlyStopping
+from src.visionforge.utils.checkpointing import save_checkpoint
+from src.visionforge.utils.logging import setup_logger
 
 logger = setup_logger(__name__)
 
