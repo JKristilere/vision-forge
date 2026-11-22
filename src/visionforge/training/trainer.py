@@ -22,7 +22,7 @@ class Trainer:
         self.val_dataloader = val_dataloader
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
-        self.early_stopping = EarlyStopping(patience=5, verbose=True)
+        self.early_stopping = EarlyStopping(verbose=True)
         self.checkpoint_dir = checkpoint_dir
         self.log_to_mlflow = log_to_mlflow
 
@@ -40,8 +40,6 @@ class Trainer:
             loss = self.criterion(outputs, labels)
             loss.backward()
             self.optimizer.step()
-            if self.scheduler is not None:
-                self.scheduler.step()
             if i % 10 == 0:
                 logger.info(f"Training Loss: {loss.item()}")
             total_loss += loss.item()
@@ -69,6 +67,9 @@ class Trainer:
             }
             logger.info(f"Epoch {epoch+1} Training Loss: {train_loss}, timing: {timing}")
             val_loss, val_accuracy = self.validate() if self.val_dataloader is not None else (float('inf'), 0)
+            # Schedulers are configured in epochs (e.g. T_max), so step once per epoch.
+            if self.scheduler is not None:
+                self.scheduler.step()
             history.append({
                 "epoch": epoch,
                 "train_loss": train_loss,

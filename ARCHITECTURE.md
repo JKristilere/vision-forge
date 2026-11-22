@@ -75,7 +75,7 @@ scripts/train.py               Training entry point (supports --resume)
 scripts/evaluate.py            Test-set evaluation and artifact generation
 src/visionforge/
   data/                        transforms.py, datasets.py (CIFAR10DataModule)
-  models/                      cnn.py (the production model), resnet.py (reference experiment)
+  models/                      cnn.py (the production model)
   training/                    trainer.py, optimizer.py, earlystopping.py
   evaluation/                  evaluator.py, error_analysis.py
   serving/                     app.py (FastAPI), predictor.py, schemas.py
@@ -146,7 +146,7 @@ Design choices:
 - **Depth and width as configuration.** `channels`, `hidden`, and `dropout` are constructor arguments, and the flattened size is computed from `len(channels)`. Changing the YAML changes the network with no code edits.
 - **Raw logits as output.** `CrossEntropyLoss` applies log-softmax internally, so no softmax belongs in the model. The softmax is applied only at inference time.
 
-The first version of the model was a smaller network with 16/32/64 channels and one convolution per block. It was replaced when the capacity-increase step of the accuracy plan was completed (see Section 14). A residual network reference implementation lives in `models/resnet.py` and was not used for the reported results.
+The first version of the model was a smaller network with 16/32/64 channels and one convolution per block. It was replaced when the capacity-increase step of the accuracy plan was completed (see Section 14).
 
 ## 7. Phase 3: Training pipeline
 
@@ -352,7 +352,7 @@ Validation and test accuracy differ by 0.3 percentage points. A gap that small i
 
 Being specific about weaknesses is part of the engineering record.
 
-1. **The learning-rate schedule is likely misconfigured.** `Trainer.train_one_epoch` calls `scheduler.step()` after every batch, but the cosine scheduler is configured with `T_max=50`, which is a count in epochs. With about 352 batches per epoch, the cosine cycle completes in roughly 100 optimizer steps (not 50 epochs), so the learning rate oscillates instead of decaying smoothly. This probably explains the noisy validation accuracy late in training. Stepping the scheduler once per epoch, or setting `T_max` to epochs × batches, should give smoother convergence and likely a higher final accuracy. It was found while writing this document, and the reported results predate any fix.
+1. **The learning-rate schedule stepped per batch (fixed in code, results pending a retrain).** `Trainer` used to call `scheduler.step()` after every batch while `T_max` is a count of epochs, so the cosine cycle completed in about 100 optimizer steps instead of 50 epochs. The learning rate oscillated, which probably explains the noisy late-epoch validation accuracy. The scheduler now steps once per epoch, and on `--resume` it is fast-forwarded to the resumed epoch. **The benchmark numbers in Section 14 were produced before this fix** and should be refreshed after retraining.
 2. **Early-stopping patience** is hardcoded to 5 in `Trainer` and not read from the `patience` config key.
 3. **Adam with `weight_decay`** applies L2 regularisation, not decoupled weight decay. `AdamW` is the usual choice.
 4. **Lint scope.** The CI lint gate selects only error-level rules. Broader rules (import sorting, unused imports) currently report 27 violations that have not yet been cleaned up.

@@ -56,6 +56,9 @@ if __name__ == "__main__":
             device=device,
         )
         start_epoch = ckpt["epoch"] + 1
+        # Scheduler state is not checkpointed, so replay the elapsed epochs.
+        for _ in range(start_epoch):
+            scheduler.step()
         best_val_loss = ckpt["best_val_loss"]
         run_id = ckpt.get("mlflow_run_id")
 

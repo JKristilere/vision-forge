@@ -119,7 +119,7 @@ ARCHITECTURE.md           Detailed design and engineering report
 
 ## Known limitations
 
-The main one is a learning-rate schedule issue (the cosine scheduler is stepped per batch but configured in epochs), which probably adds noise to late-epoch validation accuracy and leaves accuracy on the table. The full list, with analysis, is in [ARCHITECTURE.md](ARCHITECTURE.md#15-known-limitations-and-future-work).
+The main one is that the reported numbers were produced before a learning-rate scheduling fix (the cosine scheduler was stepped per batch but configured in epochs). The code is fixed and the model needs retraining to refresh the results. The full list is in [ARCHITECTURE.md](ARCHITECTURE.md#15-known-limitations-and-future-work).
 
 ## Docker: inference service
 
