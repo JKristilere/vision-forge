@@ -7,9 +7,9 @@ from pathlib import Path
 import mlflow
 import torch
 import yaml
-from src.visionforge.data.datasets import CIFAR10DataModule
 from torch import nn
 
+from src.visionforge.data.datasets import CIFAR10DataModule
 from src.visionforge.models.cnn import CNN
 from src.visionforge.training.optimizer import create_optimizer, create_scheduler
 from src.visionforge.training.trainer import Trainer

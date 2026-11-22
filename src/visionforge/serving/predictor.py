@@ -10,8 +10,8 @@ from pathlib import Path
 
 import torch
 from PIL import Image
-from src.visionforge.data.transforms import build_transforms
 
+from src.visionforge.data.transforms import build_transforms
 from src.visionforge.models.cnn import CNN
 from src.visionforge.utils.checkpointing import load_checkpoint
 

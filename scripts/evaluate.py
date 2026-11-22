@@ -8,8 +8,8 @@ from pathlib import Path
 import mlflow
 import torch
 import yaml
-from src.visionforge.data.datasets import CIFAR10DataModule
 
+from src.visionforge.data.datasets import CIFAR10DataModule
 from src.visionforge.evaluation.error_analysis import plot_error_grid
 from src.visionforge.evaluation.evaluator import *
 from src.visionforge.models.cnn import CNN
